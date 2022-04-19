@@ -3,7 +3,7 @@
 
 namespace algo{
     void selection_sort(int arr[], int n);
-    void bubble_sort();
+    void bubble_sort(int arr[], int n);
 }
 
 #endif

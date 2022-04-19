@@ -11,7 +11,7 @@ struct Option{
     std::string opt_name;
     int opt_num;
 
-    Option(int num){
+    explicit Option(int num){
         switch (num){
             case 0:
                 this->opt_name = "compare";
@@ -49,6 +49,8 @@ void print_list(int (&list)[S]){
 
 void compare(const std::vector<Option>& options){
     int list[1000];
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    std::chrono::duration<double> elapsed_seconds;
 
     std::cout << "Please input a range of data to sort between <low:high> -2147483648 and 2147483647:\n";
     int low, high;
@@ -56,11 +58,23 @@ void compare(const std::vector<Option>& options){
 
     list_init(low, high, list);
 
-    print_list<1000>(list);
+    for (auto& x : options){
+        switch (x.opt_num){
+            case 1:
+                start = std::chrono::system_clock::now();
+                algo::selection_sort(list, 1000);
+                end = std::chrono::system_clock::now();
+                break;
+            case 2:
+                start = std::chrono::system_clock::now();
+                algo::bubble_sort(list, 1000);
+                end = std::chrono::system_clock::now();
+                break;
+        }
 
-    algo::selection_sort(list, 1000);
-
-    print_list<1000>(list);
+        elapsed_seconds = end - start;
+        std::cout << "Sorting type: " << x.opt_name << ", id: " << x.opt_num << " took " << elapsed_seconds.count() << "s to sort the list\n";
+    }
 }
 
 void receive_input(int& input){
