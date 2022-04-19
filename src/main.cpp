@@ -7,27 +7,52 @@
 #include <chrono>
 #include "algo/algo.hpp"
 
+#define LIST_SIZE 10000
+
 struct Option{
     std::string opt_name;
-    int opt_num;
+    int opt_id;
 
-    explicit Option(int num){
-        switch (num){
+    enum class State{ Bad = 1, Good = 0 };
+
+    explicit Option(int id){
+        switch (id){
             case 0:
                 this->opt_name = "compare";
-                this->opt_num = num;
+                this->opt_id = id;
             case 1:
                 this->opt_name = "selection sort";
-                this->opt_num = num;
+                this->opt_id = id;
                 break;
             case 2:
                 this->opt_name = "buble sort";
-                this->opt_num = num;
+                this->opt_id = id;
                 break;
             default:
                 this->opt_name = "invalid";
-                this->opt_num = num;
+                this->opt_id = id;
         }
+    }
+
+    const Option& operator=(int id){
+        switch (id){
+            case 0:
+                this->opt_name = "compare";
+                this->opt_id = id;
+            case 1:
+                this->opt_name = "selection sort";
+                this->opt_id = id;
+                break;
+            case 2:
+                this->opt_name = "buble sort";
+                this->opt_id = id;
+                break;
+            default:
+                this->opt_name = "invalid";
+                this->opt_id = id;
+        }
+
+        return *this;
     }
 };
 
@@ -48,37 +73,44 @@ void print_list(int (&list)[S]){
 }
 
 void compare(const std::vector<Option>& options){
-    int list[1000];
+    int list[LIST_SIZE], copy_list[LIST_SIZE];
+
     std::chrono::time_point<std::chrono::system_clock> start, end;
     std::chrono::duration<double> elapsed_seconds;
 
-    std::cout << "Please input a range of data to sort between <low:high> -2147483648 and 2147483647:\n";
+    std::cout << "Please input a range of data to sort {low} {high} between -2147483648 and 2147483647:\n";
     int low, high;
     std::cin >> low >> high;
 
     list_init(low, high, list);
+    memcpy(copy_list, list, sizeof(list));
 
     for (auto& x : options){
-        switch (x.opt_num){
+        switch (x.opt_id){
             case 1:
                 start = std::chrono::system_clock::now();
-                algo::selection_sort(list, 1000);
+                algo::selection_sort(list, LIST_SIZE);
                 end = std::chrono::system_clock::now();
                 break;
             case 2:
                 start = std::chrono::system_clock::now();
-                algo::bubble_sort(list, 1000);
+                algo::bubble_sort(list, LIST_SIZE);
                 end = std::chrono::system_clock::now();
                 break;
         }
 
         elapsed_seconds = end - start;
-        std::cout << "Sorting type: " << x.opt_name << ", id: " << x.opt_num << " took " << elapsed_seconds.count() << "s to sort the list\n";
+        std::cout << "Sorting {type: " << x.opt_name << "}, {id: " << x.opt_id << "} took " << elapsed_seconds.count() << "s to sort the list\n";
+
+       memcpy(list, copy_list, sizeof(list));
     }
 }
 
-void receive_input(int& input){
-    std::cin >> input;
+void receive_input(Option& input){
+    int id;
+    std::cin >> id;
+
+    input = id;
 
     if (std::cin.fail())
     {
@@ -90,8 +122,7 @@ void receive_input(int& input){
 }
 
 void get_options(std::vector<Option>& options){
-    using const_it = std::vector<Option>::const_iterator;
-    int input = -1;
+    Option option(-1);
 
     std::cout << "\nPlease add a sorting algorithm (1-2), press (0) to compare, or anything else to exit:\n";
 
@@ -101,48 +132,47 @@ void get_options(std::vector<Option>& options){
 
     do{
         bool removed = false;
-        receive_input(input);
-        Option option(input); 
+        receive_input(option); 
 
-        if (option.opt_num > 0 && option.opt_num <= 2){
-            for (const_it begin = options.begin(),
-                end = options.end();
-                begin != end;
-                ++begin){
-                if (begin->opt_num == option.opt_num){
-                    std::cout << "[ Removed option name: " << option.opt_name << ", id: " << option.opt_num << " from comparison ]\n";
-                    options.erase(begin);
+        if (option.opt_id > 0 && option.opt_id <= 2){
+            int count{};
+
+            for (auto& x : options){
+                if (x.opt_id == option.opt_id){
+                    options.erase(options.begin() + count);
+                    std::cout << "[ Removed option {type: " << option.opt_name << "}, {id: " << option.opt_id << "} from comparison ]\n";
                     removed = true;
                 } 
+
+                ++count;
             }
 
             if (!removed)
             {
-                std::cout << "[ Added option name: " << option.opt_name << ", id: " << option.opt_num << " to comparison ]\n";
                 options.push_back(option);
+                std::cout << "[ Added option {type: " << option.opt_name << "}, {id: " << option.opt_id << "} to comparison ]\n";
             } 
         }
-        else if (option.opt_num == 0){
+        else if (option.opt_id < 0){
+            std::cout << "Qutting program in... ";
+
+            for (int i = 3; i > 0; --i){
+                std::cout << i << ' ';
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+            
+            exit(0);
+        }
+        else if (option.opt_id == 0){
             if (options.size() < 2){
                 std::cout << "Must have at least two options selected to compare!\n";
-                input = 1;
+                option = 1;
             }
         }
         else{
             std::cout << "Option number must be in the range of (1-2)!\n";
         }
-    } while(input > 0);
-
-    if (input < 0){
-        std::cout << "Qutting program in... ";
-
-        for (int i = 3; i > 0; --i){
-            std::cout << i << ' ';
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-        }
-        
-        exit(0);
-    }
+    } while(option.opt_id > 0);
 }
 
 int main(){
@@ -151,6 +181,5 @@ int main(){
     std::vector<Option> options;
     
     get_options(options);
-
     compare(options);
 }
