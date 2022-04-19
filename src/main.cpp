@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <thread>
 #include <chrono>
-#include <algo/algo.hpp>
+#include "algo/algo.hpp"
 
 int list[1000];
 
