@@ -5,11 +5,20 @@
 #include <algorithm>
 #include <thread>
 #include <chrono>
+#include <algo/algo.hpp>
 
-unsigned int list[1000];
+int list[1000];
 
 void compare(const std::vector<int>& options){
+    int list[1000];
 
+    std::cout << "Please input a range of data to sort between <low:high> -2147483648 and 2147483647:\n";
+    int low, high;
+    std::cin >> low >> high;
+
+    list_init(low, high);
+
+    print_list<1000>(list);
 }
 
 void receive_input(int& input){
@@ -31,19 +40,18 @@ void get_options(std::vector<int>& options){
     std::cout << "\nPlease add a sorting algorithm (1-2), press (0) to compare, or anything else to exit:\n";
 
     std::cout << "0 - Compare\n";
-    std::cout << "1 - Linear search\n";
-    std::cout << "2 - Binary search\n\n";
+    std::cout << "1 - Selection sort\n";
+    std::cout << "2 - Bubble sort\n\n";
 
     do{
         bool removed = false;
         receive_input(input);
 
-        if (input <= 0) break;
-
-        for (const_it begin = options.begin(),
-            end = options.end();
-            begin != end;
-            ++begin){
+        if (input > 0 && input <= 2){
+            for (const_it begin = options.begin(),
+                end = options.end();
+                begin != end;
+                ++begin){
                 if (*begin == input){
                     std::cout << "[ Removed option " << *begin << " from comparison ]\n";
                     options.erase(begin);
@@ -55,7 +63,17 @@ void get_options(std::vector<int>& options){
             {
                 std::cout << "[ Added option " << input << " to comparison ]\n";
                 options.push_back(input);
-            }  
+            } 
+        }
+        else if (input == 0){
+            if (options.size() < 2){
+                std::cout << "Must have at least two options selected to compare!\n";
+                input = 1;
+            }
+        }
+        else{
+            std::cout << "Option number must be in the range of (1-2)!\n";
+        }
     } while(input > 0);
 
     if (input < 0){
@@ -70,12 +88,13 @@ void get_options(std::vector<int>& options){
     }
 }
 
-void list_init(unsigned int low, unsigned int high){
+void list_init(int low, int high){
     for (auto& x : list)
         x = (rand() % (high - low)) + low;
 }
 
-void print_list(){
+template <size_t S>
+void print_list(int (&list)[S]){
     std::cout << "List contents: ";
 
     for (auto& x : list)
