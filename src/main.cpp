@@ -28,6 +28,10 @@ struct Option{
                 this->opt_name = "buble sort";
                 this->opt_id = id;
                 break;
+            case 3:
+                this->opt_name = "insertion sort";
+                this->opt_id = id;
+                break;
             default:
                 this->opt_name = "invalid";
                 this->opt_id = id;
@@ -45,6 +49,10 @@ struct Option{
                 break;
             case 2:
                 this->opt_name = "buble sort";
+                this->opt_id = id;
+                break;
+            case 3:
+                this->opt_name = "insertion sort";
                 this->opt_id = id;
                 break;
             default:
@@ -85,6 +93,7 @@ void compare(const std::vector<Option>& options){
     list_init(low, high, list);
     memcpy(copy_list, list, sizeof(list));
 
+    std::endl(std::cout);
     for (auto& x : options){
         switch (x.opt_id){
             case 1:
@@ -104,6 +113,7 @@ void compare(const std::vector<Option>& options){
 
        memcpy(list, copy_list, sizeof(list));
     }
+    std::endl(std::cout);
 }
 
 void receive_input(Option& input){
@@ -114,27 +124,29 @@ void receive_input(Option& input){
 
     if (std::cin.fail())
     {
-        std::cin.ignore(std::numeric_limits<int>::max(), '\n');
         std::cin.clear();
+        std::cin.ignore(std::numeric_limits<int>::max(), '\n');
 
         input = -1;
     }
 }
 
-void get_options(std::vector<Option>& options){
+int get_options(std::vector<Option>& options){
     Option option(-1);
+    int num_options = 3;
 
     std::cout << "\nPlease add a sorting algorithm (1-2), press (0) to compare, or anything else to exit:\n";
 
     std::cout << "0 - Compare\n";
     std::cout << "1 - Selection sort\n";
-    std::cout << "2 - Bubble sort\n\n";
+    std::cout << "2 - Bubble sort\n";
+    std::cout << "3 - Insertion sort\n\n";
 
     do{
         bool removed = false;
         receive_input(option); 
 
-        if (option.opt_id > 0 && option.opt_id <= 2){
+        if (option.opt_id > 0 && option.opt_id <= num_options){
             int count{};
 
             for (auto& x : options){
@@ -153,33 +165,48 @@ void get_options(std::vector<Option>& options){
                 std::cout << "[ Added option {type: " << option.opt_name << "}, {id: " << option.opt_id << "} to comparison ]\n";
             } 
         }
-        else if (option.opt_id < 0){
-            std::cout << "Qutting program in... ";
-
-            for (int i = 3; i > 0; --i){
-                std::cout << i << ' ';
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-            }
-            
-            exit(0);
-        }
         else if (option.opt_id == 0){
             if (options.size() < 2){
                 std::cout << "Must have at least two options selected to compare!\n";
                 option = 1;
             }
         }
-        else{
-            std::cout << "Option number must be in the range of (1-2)!\n";
+        else if (option.opt_id > 0){
+            std::cout << "Option number must be in the range of (1-" << num_options << ")!\n";
         }
+        else return 1;
     } while(option.opt_id > 0);
+
+    return 0;
 }
 
 int main(){
     srand(time(NULL));
 
     std::vector<Option> options;
+    char input;
     
-    get_options(options);
-    compare(options);
+    do{
+        if (!get_options(options)){
+            do{
+                compare(options);
+
+                std::cout << "Would you like to compare these sorting styles again? (y/N)\n";
+                std::cin >> input;
+
+                if (tolower(input) != 'n' && tolower(input) != 'y') input = 'n';
+            } while(tolower(input) != 'n');
+        }
+
+        std::cout << "Would you like to quit the application? (Y/n)\n";
+        std::cin >> input;
+
+        if (tolower(input) != 'n' && tolower(input) != 'y') input = 'y';
+    } while (tolower(input) != 'y');
+
+    std::cout << "Quitting program in... ";
+    for (int i = 3; i > 0; --i){
+        std::cout << i << ' ';
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
 }
