@@ -6,7 +6,7 @@
 #include <chrono>
 #include "algo.hpp"
 
-#define LIST_SIZE 20
+#define LIST_SIZE 10000
 
 struct Option{
     std::string opt_name;
@@ -22,7 +22,7 @@ struct Option{
                 this->opt_id = id;
                 break;
             case 2:
-                this->opt_name = "buble sort";
+                this->opt_name = "bubble sort";
                 this->opt_id = id;
                 break;
             case 3:
@@ -45,7 +45,7 @@ struct Option{
                 this->opt_id = id;
                 break;
             case 2:
-                this->opt_name = "buble sort";
+                this->opt_name = "bubble sort";
                 this->opt_id = id;
                 break;
             case 3:
@@ -121,33 +121,25 @@ void compare(const std::vector<Option>& options){
 
     std::endl(std::cout);
     for (auto& x : options){
-        int iter_num{};
-
-        std::cout << "Before: ";
-        for (auto x : list)
-            std::cout << x << ' ';
-        std::endl(std::cout);
+        std::pair<int, int> data_count;
 
         start = std::chrono::system_clock::now();
         switch (x.opt_id){
             case 1:
-                iter_num = algo::selection_sort(list, LIST_SIZE, order);
+                data_count = algo::selection_sort(list, LIST_SIZE, order);
                 break;
             case 2:
-                iter_num = algo::bubble_sort(list, LIST_SIZE, order);
+                data_count = algo::bubble_sort(list, LIST_SIZE, order);
                 break;
             case 3:
-                iter_num = algo::insertion_sort(list, LIST_SIZE, order);
+                data_count = algo::insertion_sort(list, LIST_SIZE, order);
         }
         end = std::chrono::system_clock::now();
 
-        std::cout << "After: ";
-        for (auto x : list)
-            std::cout << x << ' ';
-        std::endl(std::cout);
-
         elapsed_seconds = end - start;
-        std::cout << "Sorting {type: " << x.opt_name << "}, {id: " << x.opt_id << "} took " << elapsed_seconds.count() << "s to sort the list, " << iter_num << " swaps...\n";
+
+        std::cout << "Sorting {type: " << x.opt_name << "}, {id: " << x.opt_id << "} took " << elapsed_seconds.count() << "s to sort the list, " 
+        << data_count.first << " iterations, " << data_count.second << " swaps...\n";
 
         memcpy(list, copy_list, sizeof(list));
     }
@@ -158,8 +150,17 @@ int get_options(std::vector<Option>& options){
     Option option(-1);
     int num_options = 3;
 
-    std::cout << "\nPlease add a sorting algorithm (1-" << num_options << ", press (0) to compare, or anything else to exit:\n";
+    std::cout << "\nPlease add a sorting algorithm (1-" << num_options << ", press (0) to compare, or anything else to exit...\n";
+    std::cout << "Currently selected:\n";
+    if (options.size() > 0){
+        for (auto& x : options){
+            std::cout << "=> {type: " << x.opt_name << "}, {id: " << x.opt_id << "}\n";
+        }
+    }
+    else
+        std::cout << "=> None\n";
 
+    std::cout << "\n__Menu__\n";
     std::cout << "0 - Compare\n";
     std::cout << "1 - Selection sort\n";
     std::cout << "2 - Bubble sort\n";
