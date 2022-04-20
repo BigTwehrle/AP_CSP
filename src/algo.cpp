@@ -9,20 +9,19 @@ int algo::selection_sort(int arr[], int n, func compare){
     //Iterate over the list n - 1 times
     for (int i = 0; i < n - 1; ++i){
         int cur = i;
+
         /*Each iteration, complete another iteration,
         keeping track of the current smallest (or largest)
         element and comparing it to the jth.*/
-        for (int j = i + 1; j < n; ++j)
+        for (int j = i + 1; j < n; ++j){
             //Update cur if more significant index is found
             if (compare(&arr[j], &arr[cur]))
-            {
                 cur = j;
-                ++iter_num;
-            }
-        //Swap the ith element with cur
-        int temp = arr[i];
-        arr[i] = arr[cur];
-        arr[cur] = temp;
+            ++iter_num;
+            //Swap the ith element with cur
+        }
+        
+        swap(arr[i], arr[cur]);
     }
 
     return iter_num;
@@ -41,13 +40,10 @@ int algo::bubble_sort(int arr[], int n, func compare){
         for (int j = 0; j < n - i - 1; ++j){
             /*Swap two adjacent indecies if the greater
             index is more significant*/
-            if (compare(&arr[j + 1], &arr[j])){
-                int temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
+            if (compare(&arr[j + 1], &arr[j]))
+                swap(arr[j], arr[j + 1]);
 
-                ++iter_num;
-            }
+            ++iter_num;
         }
     }
 
@@ -57,21 +53,19 @@ template int algo::bubble_sort<bool (*)(int*, int*)>(int[], int n, bool (*)(int*
 
 template<typename func>
 int algo::insertion_sort(int arr[], int n, func compare){
-    int iter_num{};
-    
-    int i, key, j;
-    
-    for (i = 1; i < n; i++)
-    {
-        key = arr[i];
-        j = i - 1;
+    int iter_num;
 
-        while (j >= 0 && arr[j] > key)
-        {
-            arr[j + 1] = arr[j];
-            j = j - 1;
+    for (int i = 1; i < n; ++i){
+        int j = i;
+
+        while (j > 0 && compare(&arr[j], &arr[j - 1])){
+            swap(arr[j], arr[j - 1]);
+            --j;
+
+            ++iter_num;
         }
-        arr[j + 1] = key;
     }
+
+    return iter_num;
 }
 template int algo::insertion_sort<bool (*)(int*, int*)>(int[], int n, bool (*)(int*, int*));

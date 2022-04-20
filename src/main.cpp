@@ -6,7 +6,7 @@
 #include <chrono>
 #include "algo.hpp"
 
-#define LIST_SIZE 10000
+#define LIST_SIZE 20
 
 struct Option{
     std::string opt_name;
@@ -123,10 +123,10 @@ void compare(const std::vector<Option>& options){
     for (auto& x : options){
         int iter_num{};
 
-        // std::cout << "Before: ";
-        // for (auto x : list)
-        //     std::cout << x << ' ';
-        // std::endl(std::cout);
+        std::cout << "Before: ";
+        for (auto x : list)
+            std::cout << x << ' ';
+        std::endl(std::cout);
 
         start = std::chrono::system_clock::now();
         switch (x.opt_id){
@@ -141,10 +141,10 @@ void compare(const std::vector<Option>& options){
         }
         end = std::chrono::system_clock::now();
 
-        // std::cout << "After: ";
-        // for (auto x : list)
-        //     std::cout << x << ' ';
-        // std::endl(std::cout);
+        std::cout << "After: ";
+        for (auto x : list)
+            std::cout << x << ' ';
+        std::endl(std::cout);
 
         elapsed_seconds = end - start;
         std::cout << "Sorting {type: " << x.opt_name << "}, {id: " << x.opt_id << "} took " << elapsed_seconds.count() << "s to sort the list, " << iter_num << " swaps...\n";
