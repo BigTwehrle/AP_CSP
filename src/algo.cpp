@@ -1,49 +1,47 @@
-
 #include "algo.hpp"
 
-void algo::selection_sort(int arr[], int n){
+template<typename func>
+void algo::selection_sort(int arr[], int n, func compare){
     int i, j, min_idx; 
-  
-    // One by one move boundary of unsorted subarray 
-    for (i = 0; i < n-1; i++) 
+
+    for (i = 0; i < n - 1; i++) 
     { 
-        // Find the minimum element in unsorted array 
         min_idx = i; 
-        for (j = i+1; j < n; j++) 
-        if (arr[j] < arr[min_idx]) 
+        for (j = i + 1; j < n; j++) 
+        if (compare(arr + j, arr + min_idx)) 
             min_idx = j; 
-  
-        // Swap the found minimum element with the first element 
+
         int temp = arr[min_idx]; 
         arr[min_idx] = arr[i]; 
         arr[i] = temp; 
     } 
 }
+template void algo::selection_sort<bool (*)(int*, int*)>(int[], int n, bool (*)(int*, int*));
 
-void algo::bubble_sort(int arr[], int n){
+template<typename func>
+void algo::bubble_sort(int arr[], int n, func compare){
     int i, j;
+
     for (i = 0; i < n - 1; i++)
- 
-        // Last i elements are already in place
         for (j = 0; j < n - i - 1; j++)
-            if (arr[j] > arr[j + 1])
+            if (compare(arr + j, arr + j + 1))
             {
                 int temp = arr[j];
                 arr[j] = arr[j + 1];
                 arr[j + 1] = temp;
             }
 }
+template void algo::bubble_sort<bool (*)(int*, int*)>(int[], int n, bool (*)(int*, int*));
 
-void algo::insertion_sort(int arr[], int n){
+template<typename func>
+void algo::insertion_sort(int arr[], int n, func compare){
     int i, key, j;
+    
     for (i = 1; i < n; i++)
     {
         key = arr[i];
         j = i - 1;
- 
-        /* Move elements of arr[0..i-1], that are
-        greater than key, to one position ahead
-        of their current position */
+
         while (j >= 0 && arr[j] > key)
         {
             arr[j + 1] = arr[j];
@@ -52,3 +50,4 @@ void algo::insertion_sort(int arr[], int n){
         arr[j + 1] = key;
     }
 }
+template void algo::insertion_sort<bool (*)(int*, int*)>(int[], int n, bool (*)(int*, int*));

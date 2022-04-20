@@ -2,12 +2,11 @@
 #include <time.h>
 #include <vector>
 #include <limits>
-#include <algorithm>
 #include <thread>
 #include <chrono>
 #include "algo.hpp"
 
-#define LIST_SIZE 10000
+#define LIST_SIZE 1000
 
 struct Option{
     std::string opt_name;
@@ -62,47 +61,6 @@ struct Option{
     }
 };
 
-void list_init(int low, int high, int (&list)[LIST_SIZE]){
-    for (auto& x : list)
-        x = (rand() % (high - low)) + low;
-}
-
-void compare(const std::vector<Option>& options){
-    int list[LIST_SIZE], copy_list[LIST_SIZE];
-
-    std::chrono::time_point<std::chrono::system_clock> start, end;
-    std::chrono::duration<double> elapsed_seconds;
-
-    std::cout << "Please input a range of data to sort {low} {high} between -2147483648 and 2147483647:\n";
-    int low, high;
-    std::cin >> low >> high;
-
-    list_init(low, high, list);
-    memcpy(copy_list, list, sizeof(list));
-
-    std::endl(std::cout);
-    for (auto& x : options){
-        switch (x.opt_id){
-            case 1:
-                start = std::chrono::system_clock::now();
-                algo::selection_sort(list, LIST_SIZE);
-                end = std::chrono::system_clock::now();
-                break;
-            case 2:
-                start = std::chrono::system_clock::now();
-                algo::bubble_sort(list, LIST_SIZE);
-                end = std::chrono::system_clock::now();
-                break;
-        }
-
-        elapsed_seconds = end - start;
-        std::cout << "Sorting {type: " << x.opt_name << "}, {id: " << x.opt_id << "} took " << elapsed_seconds.count() << "s to sort the list\n";
-
-       memcpy(list, copy_list, sizeof(list));
-    }
-    std::endl(std::cout);
-}
-
 void receive_input(Option& input){
     int id;
     std::cin >> id;
@@ -116,6 +74,80 @@ void receive_input(Option& input){
 
         input = -1;
     }
+}
+
+void list_init(int low, int high, int (&list)[LIST_SIZE]){
+    for (auto& x : list)
+        x = (rand() % (high - low)) + low;
+}
+
+bool ascend(int* x, int* y){ return *x < *y; };
+bool descend(int* x, int* y){ return *x > *y; };
+
+void compare(const std::vector<Option>& options){
+    int list[LIST_SIZE], copy_list[LIST_SIZE];
+
+    std::chrono::time_point<std::chrono::system_clock> start, end;
+    std::chrono::duration<double> elapsed_seconds;
+
+    int low{}, high{};
+    bool fail = false;
+    do{
+        std::cout << "Please input a range of data to sort {low} {high} between -2147483648 and 2147483647:\n";
+        std::cin >> low >> high;
+
+        if (std::cin.fail()){
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<int>::max(), '\n');
+            fail = true;
+        }
+        else
+            fail = false;
+    } while (fail);
+
+    list_init(low, high, list);
+    memcpy(copy_list, list, sizeof(list));
+
+    char order_input{};
+    
+    std::cout << "Sort the data in ascending or descending order? (A/d)\n";
+    std::cin >> order_input;
+
+    bool (*order)(int*, int*);
+    if (tolower(order_input) == 'd')
+        order = descend;
+    else
+        order = ascend;
+
+    std::endl(std::cout);
+    for (auto& x : options){
+        switch (x.opt_id){
+            case 1:
+                start = std::chrono::system_clock::now();
+                algo::selection_sort(list, LIST_SIZE, order);
+                end = std::chrono::system_clock::now();
+                break;
+            case 2:
+                start = std::chrono::system_clock::now();
+                algo::bubble_sort(list, LIST_SIZE, order);
+                end = std::chrono::system_clock::now();
+                break;
+            case 3:
+                start = std::chrono::system_clock::now();
+                algo::insertion_sort(list, LIST_SIZE, order);
+                end = std::chrono::system_clock::now();
+        }
+
+        elapsed_seconds = end - start;
+        std::cout << "Sorting {type: " << x.opt_name << "}, {id: " << x.opt_id << "} took " << elapsed_seconds.count() << "s to sort the list...\n";
+
+        for (auto x : list)
+            std::cout << x << ' ';
+        std::endl(std::cout);
+
+        memcpy(list, copy_list, sizeof(list));
+    }
+    std::endl(std::cout);
 }
 
 int get_options(std::vector<Option>& options){
@@ -180,16 +212,12 @@ int main(){
 
                 std::cout << "Would you like to compare these sorting styles again? (y/N)\n";
                 std::cin >> input;
-
-                if (tolower(input) != 'n' && tolower(input) != 'y') input = 'n';
-            } while(tolower(input) != 'n');
+            } while(tolower(input) == 'y');
         }
 
         std::cout << "Would you like to quit the application? (Y/n)\n";
         std::cin >> input;
-
-        if (tolower(input) != 'n' && tolower(input) != 'y') input = 'y';
-    } while (tolower(input) != 'y');
+    } while (tolower(input) == 'n');
 
     std::cout << "Quitting program in... ";
     for (int i = 3; i > 0; --i){
