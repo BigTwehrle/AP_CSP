@@ -5,15 +5,13 @@
 #include <algorithm>
 #include <thread>
 #include <chrono>
-#include "algo/algo.hpp"
+#include "algo.hpp"
 
 #define LIST_SIZE 10000
 
 struct Option{
     std::string opt_name;
     int opt_id;
-
-    enum class State{ Bad = 1, Good = 0 };
 
     explicit Option(int id){
         switch (id){
@@ -64,20 +62,9 @@ struct Option{
     }
 };
 
-template <size_t S>
-void list_init(int low, int high, int (&list)[S]){
+void list_init(int low, int high, int (&list)[LIST_SIZE]){
     for (auto& x : list)
         x = (rand() % (high - low)) + low;
-}
-
-template <size_t S>
-void print_list(int (&list)[S]){
-    std::cout << "List contents: ";
-
-    for (auto& x : list)
-        std::cout << x << ' ';
-
-    std::endl(std::cout);
 }
 
 void compare(const std::vector<Option>& options){
@@ -135,7 +122,7 @@ int get_options(std::vector<Option>& options){
     Option option(-1);
     int num_options = 3;
 
-    std::cout << "\nPlease add a sorting algorithm (1-2), press (0) to compare, or anything else to exit:\n";
+    std::cout << "\nPlease add a sorting algorithm (1-" << num_options << ", press (0) to compare, or anything else to exit:\n";
 
     std::cout << "0 - Compare\n";
     std::cout << "1 - Selection sort\n";
