@@ -6,7 +6,7 @@
 #include <chrono>
 #include "algo.hpp"
 
-#define LIST_SIZE 1000
+#define LIST_SIZE 10000
 
 struct Option{
     std::string opt_name;
@@ -121,29 +121,33 @@ void compare(const std::vector<Option>& options){
 
     std::endl(std::cout);
     for (auto& x : options){
+        int iter_num{};
+
+        // std::cout << "Before: ";
+        // for (auto x : list)
+        //     std::cout << x << ' ';
+        // std::endl(std::cout);
+
+        start = std::chrono::system_clock::now();
         switch (x.opt_id){
             case 1:
-                start = std::chrono::system_clock::now();
-                algo::selection_sort(list, LIST_SIZE, order);
-                end = std::chrono::system_clock::now();
+                iter_num = algo::selection_sort(list, LIST_SIZE, order);
                 break;
             case 2:
-                start = std::chrono::system_clock::now();
-                algo::bubble_sort(list, LIST_SIZE, order);
-                end = std::chrono::system_clock::now();
+                iter_num = algo::bubble_sort(list, LIST_SIZE, order);
                 break;
             case 3:
-                start = std::chrono::system_clock::now();
-                algo::insertion_sort(list, LIST_SIZE, order);
-                end = std::chrono::system_clock::now();
+                iter_num = algo::insertion_sort(list, LIST_SIZE, order);
         }
+        end = std::chrono::system_clock::now();
+
+        // std::cout << "After: ";
+        // for (auto x : list)
+        //     std::cout << x << ' ';
+        // std::endl(std::cout);
 
         elapsed_seconds = end - start;
-        std::cout << "Sorting {type: " << x.opt_name << "}, {id: " << x.opt_id << "} took " << elapsed_seconds.count() << "s to sort the list...\n";
-
-        for (auto x : list)
-            std::cout << x << ' ';
-        std::endl(std::cout);
+        std::cout << "Sorting {type: " << x.opt_name << "}, {id: " << x.opt_id << "} took " << elapsed_seconds.count() << "s to sort the list, " << iter_num << " swaps...\n";
 
         memcpy(list, copy_list, sizeof(list));
     }

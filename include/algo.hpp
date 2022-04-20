@@ -3,13 +3,13 @@
 
 namespace algo{
     template<typename func>
-    void selection_sort(int arr[], int n, func compare);
+    int selection_sort(int arr[], int n, func compare);
 
     template<typename func>
-    void bubble_sort(int arr[], int n, func compare);
+    int bubble_sort(int arr[], int n, func compare);
 
     template<typename func>
-    void insertion_sort(int arr[], int n, func compare);
+    int insertion_sort(int arr[], int n, func compare);
 }
 
 #endif
