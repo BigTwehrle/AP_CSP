@@ -6,7 +6,7 @@
 #include <chrono>
 #include "algo.hpp"
 
-#define LIST_SIZE 10000
+#define LIST_SIZE 50000
 
 struct Option{
     std::string name;
@@ -46,36 +46,7 @@ struct Option{
     }
 
     const Option& operator=(int id){
-        switch (id){
-            case 0:
-                this->name = "compare";
-                this->id = id;
-            case 1:
-                this->name = "selection sort";
-                this->id = id;
-                break;
-            case 2:
-                this->name = "bubble sort";
-                this->id = id;
-                break;
-            case 3:
-                this->name = "insertion sort";
-                this->id = id;
-                break;
-            case 4:
-                this->name = "quick sort";
-                this->id = id;
-                break;
-            case 5:
-                this->name = "merge sort";
-                this->id = id;
-                break;
-            default:
-                this->name = "invalid";
-                this->id = id;
-        }
-
-        return *this;
+        return *this = Option(id);
     }
 };
 
@@ -132,10 +103,6 @@ void compare_options(std::vector<Option>& options){
     for (auto& option : options){
         std::pair<int, int> results;
 
-        // for (auto& x : list)
-        //     std::cout << x << ' ';
-        // std::endl(std::cout);
-
         start_time = std::chrono::system_clock::now();
         switch (option.id){
             case 1:
@@ -150,12 +117,11 @@ void compare_options(std::vector<Option>& options){
             case 4:
                 algo::quick_sort(list, 0, LIST_SIZE - 1, results);
                 break;
+            case 5:
+                algo::merge_sort(list, 0, LIST_SIZE - 1, results);
+                break;
         }
         end_time = std::chrono::system_clock::now();
-
-        // for (auto& x : list)
-        //     std::cout << x << ' ';
-        // std::endl(std::cout);
 
         option.iter_count = results.first;
         option.swap_count = results.second;

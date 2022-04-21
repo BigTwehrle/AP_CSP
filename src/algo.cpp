@@ -14,9 +14,9 @@ void algo::selection_sort(int arr[], int n, std::pair<int, int>& results){
             if (arr[j] < arr[cur])
                 cur = j;
             ++results.first;
-            //Swap the ith element with cur
         }
         
+        //Swap the ith element with cur
         swap(arr[i], arr[cur]);
         ++results.second;
     }
@@ -71,13 +71,17 @@ void algo::quick_sort(int arr[], int begin, int end, std::pair<int, int>& result
     }
 }
 
-void merge_sort(int arr[], int begin, int end, std::pair<int, int>& results){
+void algo::merge_sort(int arr[], int begin, int end, std::pair<int, int>& results){
+    //Split up array until segment of maximum length 2
     if (begin < end){
-        int mid = begin + (end - begin) / 2;
-
-        merge_sort(arr, begin, mid, results);
-        merge_sort(arr, mid + 1, end, results);
-        merge();
+        //Variable to store the middle index of the array segment
+        int mid = (begin + end) / 2;
         
+        //Split up the left side of the segment into smaller segments
+        merge_sort(arr, begin, mid, results);
+        //Split up the right  side of the segment into smaller segments
+        merge_sort(arr, mid + 1, end, results);
+        //Sort and merge the two segments split up
+        merge(arr, begin, mid, end, results);    
     }
 }
