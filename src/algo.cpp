@@ -65,8 +65,6 @@ void algo::quick_sort(int arr[], int begin, int end, std::pair<int, int>& result
  
     int pivot_index = partition(arr, begin, end, results);
     
-    
     quick_sort(arr, begin, pivot_index - 1, results);
- 
     quick_sort(arr, pivot_index + 1, end, results);
 }

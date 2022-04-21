@@ -13,12 +13,11 @@ namespace algo{
 
         int partition(int arr[], int start, int end, std::pair<int, int>& results)
         {
-        
-            int pivot = arr[start];
+            int pivot_data = arr[start];
         
             int count{};
             for (int i = start + 1; i <= end; i++) {
-                if (arr[i] <= pivot)
+                if (arr[i] <= pivot_data)
                     ++count, ++results.first;
             }
         
@@ -29,14 +28,11 @@ namespace algo{
             int i = start, j = end;
         
             while (i < pivot_index && j > pivot_index) {
-        
-                while (arr[i] <= pivot) {
+                while (arr[i] <= pivot_data)
                     i++;
-                }
         
-                while (arr[j] > pivot) {
+                while (arr[j] > pivot_data) 
                     j--;
-                }
         
                 if (i < pivot_index && j > pivot_index) {
                     swap(arr[i++], arr[j--]);
