@@ -59,12 +59,25 @@ void algo::insertion_sort(int arr[], int n, std::pair<int, int>& results){
 }
 
 void algo::quick_sort(int arr[], int begin, int end, std::pair<int, int>& results){
-    
-    if (begin >= end)
-        return;
- 
-    int pivot_index = partition(arr, begin, end, results);
-    
-    quick_sort(arr, begin, pivot_index - 1, results);
-    quick_sort(arr, pivot_index + 1, end, results);
+    //Sorts if the segment is greatet than one element
+    if (begin < end)
+    {
+        //Performs recursion on several pivots to sort the list
+        int pivot_index = partition(arr, begin, end, results);
+        
+        //Recursively sort each side of a pivot
+        quick_sort(arr, begin, pivot_index - 1, results);
+        quick_sort(arr, pivot_index + 1, end, results);
+    }
+}
+
+void merge_sort(int arr[], int begin, int end, std::pair<int, int>& results){
+    if (begin < end){
+        int mid = begin + (end - begin) / 2;
+
+        merge_sort(arr, begin, mid, results);
+        merge_sort(arr, mid + 1, end, results);
+        merge();
+        
+    }
 }

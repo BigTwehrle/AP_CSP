@@ -35,6 +35,10 @@ struct Option{
                 this->name = "quick sort";
                 this->id = id;
                 break;
+            case 5:
+                this->name = "merge sort";
+                this->id = id;
+                break;
             default:
                 this->name = "invalid";
                 this->id = id;
@@ -60,6 +64,10 @@ struct Option{
                 break;
             case 4:
                 this->name = "quick sort";
+                this->id = id;
+                break;
+            case 5:
+                this->name = "merge sort";
                 this->id = id;
                 break;
             default:
@@ -167,7 +175,7 @@ void compare_options(std::vector<Option>& options){
 
 int get_options(std::vector<Option>& options){
     Option option(-1);
-    int num_options = 4;
+    int num_options = 5;
 
     std::cout << "\nPlease add a sorting algorithm (1-" << num_options << ", press (0) to compare, or anything else to exit...\n";
     std::cout << "Currently selected:\n";
@@ -184,7 +192,8 @@ int get_options(std::vector<Option>& options){
     std::cout << "1 - Selection sort\n";
     std::cout << "2 - Bubble sort\n";
     std::cout << "3 - Insertion sort\n";
-    std::cout << "4 - Quick sort\n\n";
+    std::cout << "4 - Quick sort\n";
+    std::cout << "5 - Merge sort\n\n";
 
     do{
         bool removed = false;

@@ -5,44 +5,58 @@
 
 namespace algo{
     namespace{
+        //Swap the data in two elements passed to swap()
         void swap(int& x, int& y){
             int temp = x;
             x = y;
             y = temp;
         }
 
-        int partition(int arr[], int start, int end, std::pair<int, int>& results)
+        int partition(int arr[], int begin, int end, std::pair<int, int>& results)
         {
-            int pivot_data = arr[start];
-        
+            //Use first index in array as pivot
+            int pivot_data = arr[begin];
+
+            //Iterate list an determine pivot absolute point in sorted list
             int count{};
-            for (int i = start + 1; i <= end; i++) {
+            for (int i = begin + 1; i <= end; i++) {
                 if (arr[i] <= pivot_data)
                     ++count, ++results.first;
             }
-        
-            int pivot_index = start + count;
-            swap(arr[pivot_index], arr[start]);
+
+            //Update the posititon of the pivot in its absolute point
+            int pivot_index = begin + count;
+            swap(arr[pivot_index], arr[begin]);
             ++results.second;
         
-            int i = start, j = end;
+            int b = begin, a = end;
+
+            /*Loops until all the smaller elements are before the pivot
+            and all the larger elements are after the pivot*/
+            while (b < pivot_index && a > pivot_index) {
+                while (arr[b] <= pivot_data)
+                    ++b;
         
-            while (i < pivot_index && j > pivot_index) {
-                while (arr[i] <= pivot_data)
-                    i++;
-        
-                while (arr[j] > pivot_data) 
-                    j--;
-        
-                if (i < pivot_index && j > pivot_index) {
-                    swap(arr[i++], arr[j--]);
+                while (arr[a] > pivot_data) 
+                    --a;
+
+                /*Swaps elements on each side of pivot
+                element i is before pivot and element j is after*/
+                if (b < pivot_index && a > pivot_index) {
+                    swap(arr[b++], arr[a--]);
                     ++results.second;
                 }
 
                 ++results.first;
             }
-        
+
+            /*Returns the pivot index for quick_sort() to perform 
+            recursion and sort both sides of the pivot*/
             return pivot_index;
+        }
+
+        void merge(){
+            
         }
     }
 
@@ -53,6 +67,8 @@ namespace algo{
     void insertion_sort(int arr[], int n, std::pair<int, int>& results);
 
     void quick_sort(int arr[], int begin, int end, std::pair<int, int>& results);
+
+    void merge_sort(int arr[], int begin, int end, std::pair<int, int>& results);
 }
 
 #endif
