@@ -29,6 +29,10 @@ struct Option{
                 this->opt_name = "insertion sort";
                 this->opt_id = id;
                 break;
+            case 4:
+                this->opt_name = "quick sort";
+                this->opt_id = id;
+                break;
             default:
                 this->opt_name = "invalid";
                 this->opt_id = id;
@@ -50,6 +54,10 @@ struct Option{
                 break;
             case 3:
                 this->opt_name = "insertion sort";
+                this->opt_id = id;
+                break;
+            case 4:
+                this->opt_name = "quick sort";
                 this->opt_id = id;
                 break;
             default:
@@ -81,65 +89,48 @@ void list_init(int low, int high, int (&list)[LIST_SIZE]){
         x = (rand() % (high - low)) + low;
 }
 
-bool ascend(int* x, int* y){ return *x < *y; };
-bool descend(int* x, int* y){ return *x > *y; };
-
 void compare(const std::vector<Option>& options){
     int list[LIST_SIZE], copy_list[LIST_SIZE];
 
     std::chrono::time_point<std::chrono::system_clock> start, end;
     std::chrono::duration<double> elapsed_seconds;
 
-    int low{}, high{};
-    bool fail = false;
-    do{
-        std::cout << "Please input a range of data to sort {low} {high} between -2147483648 and 2147483647:\n";
-        std::cin >> low >> high;
-
-        if (std::cin.fail()){
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<int>::max(), '\n');
-            fail = true;
-        }
-        else
-            fail = false;
-    } while (fail);
-
-    list_init(low, high, list);
+    list_init(-1000, 1000, list);
     memcpy(copy_list, list, sizeof(list));
-
-    char order_input{};
-    
-    std::cout << "Sort the data in ascending or descending order? (A/d)\n";
-    std::cin >> order_input;
-
-    bool (*order)(int*, int*);
-    if (tolower(order_input) == 'd')
-        order = descend;
-    else
-        order = ascend;
 
     std::endl(std::cout);
     for (auto& x : options){
-        std::pair<int, int> data_count;
+        std::pair<int, int> results;
+
+        // for (auto& x : list)
+        //     std::cout << x << ' ';
+        // std::endl(std::cout);
 
         start = std::chrono::system_clock::now();
         switch (x.opt_id){
             case 1:
-                data_count = algo::selection_sort(list, LIST_SIZE, order);
+                algo::selection_sort(list, LIST_SIZE, results);
                 break;
             case 2:
-                data_count = algo::bubble_sort(list, LIST_SIZE, order);
+                algo::bubble_sort(list, LIST_SIZE, results);
                 break;
             case 3:
-                data_count = algo::insertion_sort(list, LIST_SIZE, order);
+                algo::insertion_sort(list, LIST_SIZE, results);
+                break;
+            case 4:
+                algo::quick_sort(list, 0, LIST_SIZE - 1, results);
+                break;
         }
         end = std::chrono::system_clock::now();
+
+        // for (auto& x : list)
+        //     std::cout << x << ' ';
+        // std::endl(std::cout);
 
         elapsed_seconds = end - start;
 
         std::cout << "Sorting {type: " << x.opt_name << "}, {id: " << x.opt_id << "} took " << elapsed_seconds.count() << "s to sort the list, " 
-        << data_count.first << " iterations, " << data_count.second << " swaps...\n";
+        << results.first << " iterations, " << results.second << " swaps...\n";
 
         memcpy(list, copy_list, sizeof(list));
     }
@@ -148,7 +139,7 @@ void compare(const std::vector<Option>& options){
 
 int get_options(std::vector<Option>& options){
     Option option(-1);
-    int num_options = 3;
+    int num_options = 4;
 
     std::cout << "\nPlease add a sorting algorithm (1-" << num_options << ", press (0) to compare, or anything else to exit...\n";
     std::cout << "Currently selected:\n";
@@ -164,7 +155,8 @@ int get_options(std::vector<Option>& options){
     std::cout << "0 - Compare\n";
     std::cout << "1 - Selection sort\n";
     std::cout << "2 - Bubble sort\n";
-    std::cout << "3 - Insertion sort\n\n";
+    std::cout << "3 - Insertion sort\n";
+    std::cout << "4 - Quick sort\n\n";
 
     do{
         bool removed = false;
