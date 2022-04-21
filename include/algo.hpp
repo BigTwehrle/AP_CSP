@@ -2,6 +2,7 @@
 #define ALGO_HPP
 
 #include <utility>
+#include <cstdint>
 
 namespace algo{
     namespace{
@@ -12,7 +13,7 @@ namespace algo{
             y = temp;
         }
 
-        int partition(int arr[], int begin, int end, std::pair<int, int>& results)
+        int partition(int arr[], int begin, int end, std::pair<uint64_t, uint64_t>& results)
         {
             //Use first index in array as pivot
             int pivot_data = arr[begin];
@@ -27,6 +28,7 @@ namespace algo{
             //Update the posititon of the pivot in its absolute point
             int pivot_index = begin + count;
             swap(arr[pivot_index], arr[begin]);
+            results.first += 2;
             ++results.second;
         
             int b = begin, a = end;
@@ -35,19 +37,18 @@ namespace algo{
             and all the larger elements are after the pivot*/
             while (b < pivot_index && a > pivot_index) {
                 while (arr[b] <= pivot_data)
-                    ++b;
+                    ++b, ++results.first;
         
                 while (arr[a] > pivot_data) 
-                    --a;
+                    --a, ++results.first;
 
                 /*Swaps elements on each side of pivot
                 element i is before pivot and element j is after*/
                 if (b < pivot_index && a > pivot_index) {
                     swap(arr[b++], arr[a--]);
+                    results.first += 2;
                     ++results.second;
                 }
-
-                ++results.first;
             }
 
             /*Returns the pivot index for quick_sort() to perform 
@@ -55,7 +56,7 @@ namespace algo{
             return pivot_index;
         }
 
-        void merge(int arr[], int const left, int const mid, int const right, std::pair<int, int>& results)
+        void merge(int arr[], int const left, int const mid, int const right, std::pair<uint64_t, uint64_t>& results)
         {
             int left_index = left, //First index of the left array segment
                 right_index = mid + 1, //First index of the right array segment
@@ -70,17 +71,18 @@ namespace algo{
                 and increment each counter*/
                 if (arr[left_index] < arr[right_index]){
                     temp[merge_index - left] = arr[left_index];
-                    ++left_index;
+                    ++left_index, ++results.first, ++results.second;
                 }
                 /*Else if the value in the right segment index
                 is smaller, sub it into the merge array segment
                 and increment each counter*/
                 else{
                     temp[merge_index - left] = arr[right_index];
-                    ++right_index;
+                    ++right_index, ++results.first, ++results.second;
                 }
 
-                ++merge_index, ++results.first;
+                results.first += 2;
+                ++merge_index;
             }
 
             /*Since the end of one side of the array segment may
@@ -89,11 +91,11 @@ namespace algo{
             of the unfinished array*/
             while (left_index <= mid){ //For the left array segment
                 temp[merge_index - left] = arr[left_index];
-                ++left_index, ++merge_index, ++results.first;
+                ++left_index, ++merge_index, ++results.first, ++results.second;
             }
             while (right_index <= right){ //For the right array segment
                 temp[merge_index - left] = arr[right_index];
-                ++right_index, ++merge_index, ++results.first;
+                ++right_index, ++merge_index, ++results.first, ++results.second;
             }
 
             /*Once done sorting the merged array segment,
@@ -106,15 +108,15 @@ namespace algo{
         }
     }
 
-    void selection_sort(int arr[], int n, std::pair<int, int>& results);
+    void selection_sort(int arr[], int n, std::pair<uint64_t, uint64_t>& results);
 
-    void bubble_sort(int arr[], int n, std::pair<int, int>& results);
+    void bubble_sort(int arr[], int n, std::pair<uint64_t, uint64_t>& results);
 
-    void insertion_sort(int arr[], int n, std::pair<int, int>& results);
+    void insertion_sort(int arr[], int n, std::pair<uint64_t, uint64_t>& results);
 
-    void quick_sort(int arr[], int begin, int end, std::pair<int, int>& results);
+    void quick_sort(int arr[], int begin, int end, std::pair<uint64_t, uint64_t>& results);
 
-    void merge_sort(int arr[], int begin, int end, std::pair<int, int>& results);
+    void merge_sort(int arr[], int begin, int end, std::pair<uint64_t, uint64_t>& results);
 }
 
 #endif

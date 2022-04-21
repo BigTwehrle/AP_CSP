@@ -2,7 +2,7 @@
 #include <iostream>
 #include <chrono>
 
-void algo::selection_sort(int arr[], int n, std::pair<int, int>& results){
+void algo::selection_sort(int arr[], int n, std::pair<uint64_t, uint64_t>& results){
     for (int i = 0; i < n - 1; ++i){
         int cur = i;
 
@@ -13,16 +13,17 @@ void algo::selection_sort(int arr[], int n, std::pair<int, int>& results){
             //Update cur if more significant index is found
             if (arr[j] < arr[cur])
                 cur = j;
-            ++results.first;
+            results.first += 2;
         }
         
         //Swap the ith element with cur
         swap(arr[i], arr[cur]);
+        results.first += 2;
         ++results.second;
     }
 }
 
-void algo::bubble_sort(int arr[], int n, std::pair<int, int>& results){
+void algo::bubble_sort(int arr[], int n, std::pair<uint64_t, uint64_t>& results){
     int iter_num{}, swap_num{};
 
     for (int i = 0; i < n - 1; ++i){
@@ -34,15 +35,16 @@ void algo::bubble_sort(int arr[], int n, std::pair<int, int>& results){
             index is more significant*/
             if (arr[j + 1] < arr[j]){
                 swap(arr[j], arr[j + 1]);
+                results.first += 2;
                 ++results.second;
             }
 
-            ++results.first;
+            results.first += 2;
         }
     }
 }
 
-void algo::insertion_sort(int arr[], int n, std::pair<int, int>& results){
+void algo::insertion_sort(int arr[], int n, std::pair<uint64_t, uint64_t>& results){
     for (int i = 1; i < n; ++i){
         int j = i;
 
@@ -53,12 +55,15 @@ void algo::insertion_sort(int arr[], int n, std::pair<int, int>& results){
             swap(arr[j], arr[j - 1]);
             --j;
 
-            ++results.first, ++results.second;
+            results.first += 4;
+            ++results.second;
         }
+
+        results.first += 2;
     }
 }
 
-void algo::quick_sort(int arr[], int begin, int end, std::pair<int, int>& results){
+void algo::quick_sort(int arr[], int begin, int end, std::pair<uint64_t, uint64_t>& results){
     //Sorts if the segment is greatet than one element
     if (begin < end)
     {
@@ -71,7 +76,7 @@ void algo::quick_sort(int arr[], int begin, int end, std::pair<int, int>& result
     }
 }
 
-void algo::merge_sort(int arr[], int begin, int end, std::pair<int, int>& results){
+void algo::merge_sort(int arr[], int begin, int end, std::pair<uint64_t, uint64_t>& results){
     //Split up array until segment of maximum length 2
     if (begin < end){
         //Variable to store the middle index of the array segment
