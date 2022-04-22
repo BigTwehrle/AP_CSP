@@ -5,8 +5,6 @@
 #include <thread>
 #include "algo.hpp"
 
-#define LIST_SIZE 50000 //Macro defining the size of the list to be sorted
-
 //Abstraction to receive input from the user and format an option accordingly
 void receive_input(Algo& input){
     //Extract characters from the standard input stream and store them in the integer variable id
@@ -73,9 +71,9 @@ void get_results(const std::vector<Algo>& options){
 
 //Initialize the array to be sorted, run the sorting methods, and print metadata about their execution
 void compare_options(std::vector<Algo>& options){
-    int list[LIST_SIZE], copy_list[LIST_SIZE]; //Create two lists of size 50,000 to hold the data
+    int list[LIST_SIZE], copy_list[LIST_SIZE]; //Create two lists of size LIST_SIZE to hold the data
 
-    list_init(-25000, 25000, list); //Initialize the first list created with random numbers between -25,000 and 25,000
+    list_init(LOW, HIGH, list); //Initialize the first list created with random numbers between -25,000 and 25,000
     memcpy(copy_list, list, sizeof(list)); //Perform a byte-wise copy on the first list into the copy list
 
     std::endl(std::cout);
@@ -102,7 +100,7 @@ void compare_options(std::vector<Algo>& options){
         }
 
         //Print metadata about sorting algorithm
-        std::cout << "Sorting 50,000 integers (-25,000 <=> 25,000) {type: " << option.algo_name() << 
+        std::cout << "Sorting " << LIST_SIZE << " integers (" << LOW << " <=> " << HIGH << ") {type: " << option.algo_name() << 
             "}, {id: " << option.algo_id() << "} took " << option.algo_time().count() << "s to sort the list, " 
             << option.algo_accessc() << " array accesses, " << option.algo_movec() << " data moves...\n";
         

@@ -117,7 +117,7 @@ void Algo::quick_sort(int arr[], int begin, int end){
     //Create a start and stop time variable to time the sorting algorithms
     std::chrono::time_point<std::chrono::system_clock> start_time, end_time;
 
-    if (begin == 0 && end == 49999){
+    if (begin == 0 && end == LIST_SIZE - 1){
         start_time = std::chrono::system_clock::now(); //Get algorithm start time
     }
 
@@ -132,7 +132,7 @@ void Algo::quick_sort(int arr[], int begin, int end){
         quick_sort(arr, pivot_index + 1, end);
     }
 
-    if (begin == 0 && end == 49999){
+    if (begin == 0 && end == LIST_SIZE - 1){
         end_time = std::chrono::system_clock::now(); //Get algorithm finish time
         this->time = end_time - start_time; //Set algorithm's time to the end time - start time
     }
@@ -142,7 +142,7 @@ void Algo::merge_sort(int arr[], int begin, int end){
     //Create a start and stop time variable to time the sorting algorithms
     std::chrono::time_point<std::chrono::system_clock> start_time, end_time;
 
-    if (begin == 0 && end == 49999){
+    if (begin == 0 && end == LIST_SIZE - 1){
         start_time = std::chrono::system_clock::now(); //Get algorithm start time
     }
 
@@ -159,7 +159,7 @@ void Algo::merge_sort(int arr[], int begin, int end){
         merge(arr, begin, mid, end);    
     }
 
-    if (begin == 0 && end == 49999){
+    if (begin == 0 && end == LIST_SIZE - 1){
         end_time = std::chrono::system_clock::now(); //Get algorithm finish time
         this->time = end_time - start_time; //Set algorithm's time to the end time - start time
     }

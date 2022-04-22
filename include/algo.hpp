@@ -5,6 +5,10 @@
 #include <chrono>
 #include <string>
 
+#define LIST_SIZE 10000 //Macro defining the size of the list to be sorted
+#define HIGH LIST_SIZE / 2 //Macro defining the lower-bound of list integer range
+#define LOW -LIST_SIZE / 2 //Macro defining the upper-bound of list integer range
+
 /*Structure called Algo which contains information
 about the performance of the sorting method as well as
 general metadata used by other functionality*/
