@@ -1,7 +1,7 @@
 #include "algo.hpp"
 #include <iostream>
 
-explicit Algo::Algo(int id){ //Constructor to create an option based on an id
+Algo::Algo(int id){ //Constructor to create an Algo based on an id
     switch (id){
         case 0: //If id is 0, Algo is called compare
             this->name = "compare";
