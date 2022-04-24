@@ -3,6 +3,7 @@
 #include <vector>
 #include <limits>
 #include <thread>
+#include <cstring>
 #include "algo.hpp"
 
 //Abstraction to receive input from the user and format an option accordingly
