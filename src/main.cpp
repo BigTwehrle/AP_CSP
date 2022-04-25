@@ -211,4 +211,5 @@ int main(){
         std::cout << i << ' ' << std::flush;
         std::this_thread::sleep_for(std::chrono::seconds(1)); //Pause the current thread of execution for three seconds, while printing a countdown in between each pause
     }
+    std::endl(std::cout);
 }
