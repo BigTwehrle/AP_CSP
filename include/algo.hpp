@@ -19,6 +19,8 @@ class Algo{
     
         const Algo& operator=(int id); //Operator to allow assignment of Algos to integers
 
+        void reset(); //Resets the algorithm's statistics
+
         //Declare sorting algorithms
         void selection_sort(int arr[], int n);
         void bubble_sort(int arr[], int n);

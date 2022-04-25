@@ -31,6 +31,11 @@ const Algo& Algo::operator=(int id){ //Operator to allow assignment of Algos to 
     return *this = Algo(id); //Creates a new Algo given an id and assigns it to the caller
 }
 
+void Algo::reset(){ //Reset's the algorithm's statistics
+    this->access_count = 0;
+    this->move_count = 0;
+}
+
 void Algo::selection_sort(int arr[], int n){
     //Create a start and stop time variable to time the sorting algorithms
     std::chrono::time_point<std::chrono::system_clock> start_time, end_time;

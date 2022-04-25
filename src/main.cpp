@@ -183,7 +183,7 @@ int get_options(std::vector<Algo>& options){
 }
 
 int main(){
-    srand(time(NULL)); //Initialize random class with the current system time seed for realistic random number generation
+    srand(time(0)); //Initialize random class with the current system time seed for realistic random number generation
 
     std::vector<Algo> options; //Vector of Algos to store the list of options
     char input; //Input variable to store a character for yes/no questions
@@ -193,6 +193,9 @@ int main(){
         if (get_options(options)){ //Get sorting algorithms and push them to the options list. Execute the list if anything but zero is returned, meaning success
             do{
                 compare_options(options); //Run the chosen options/sorting algorithms and compare them
+
+                for (auto& x : options) //Resets the statistics recorded of each algorithm
+                    x.reset();
 
                 //Request if the user would like to run the test again with the same sorting styles
                 std::cout << "Would you like to compare these sorting styles again? (y/N)\n";
