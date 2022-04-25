@@ -103,7 +103,7 @@ void compare_options(std::vector<Algo>& options){
         //Print metadata about sorting algorithm
         std::cout << "Sorting " << LIST_SIZE << " integers (" << LOW << " <=> " << HIGH << ") {type: " << option.algo_name() << 
             "}, {id: " << option.algo_id() << "} took " << option.algo_time().count() << "s to sort the list, " 
-            << option.algo_accessc() << " array accesses, " << option.algo_movec() << " data moves...\n";
+            << option.algo_accessc() << " array accesses, " << option.algo_movec() << " data moves..." << std::endl;
         
         memcpy(list, copy_list, sizeof(list)); /*Perform a byte-wise copy on the copy list into the original list ,
         so the unsorted data can remain constant throughout each test*/
@@ -208,7 +208,7 @@ int main(){
     //If the user wants to quit the application, continue to the end of main() where the program will exit naturally
     std::cout << "Quitting program in... ";
     for (int i = 3; i > 0; --i){
-        std::cout << i << ' ';
+        std::cout << i << ' ' << std::flush;
         std::this_thread::sleep_for(std::chrono::seconds(1)); //Pause the current thread of execution for three seconds, while printing a countdown in between each pause
     }
 }
