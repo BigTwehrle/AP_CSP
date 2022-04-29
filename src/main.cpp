@@ -72,10 +72,10 @@ void get_results(const std::vector<Algo>& options){
 
 //Initialize the array to be sorted, run the sorting methods, and print metadata about their execution
 void compare_options(std::vector<Algo>& options){
-    int list[LIST_SIZE], copy_list[LIST_SIZE]; //Create two lists of size LIST_SIZE to hold the data
+    int unsorted_list[LIST_SIZE], copy_list[LIST_SIZE]; //Create two lists of size LIST_SIZE to hold the data
 
-    list_init(LOW, HIGH, list); //Initialize the first list created with random numbers between -25,000 and 25,000
-    memcpy(copy_list, list, sizeof(list)); //Perform a byte-wise copy on the first list into the copy list
+    list_init(LOW, HIGH, unsorted_list); //Initialize the first list created with random numbers between -25,000 and 25,000
+    memcpy(copy_list, unsorted_list, sizeof(unsorted_list)); //Perform a byte-wise copy on the first list into the copy list
 
     std::endl(std::cout);
     std::cout << "__SORTING DATA (1s delay)__\n";
@@ -84,19 +84,19 @@ void compare_options(std::vector<Algo>& options){
         //Switch statement to choose which algorithm to execute based on the current option in the option list
         switch (option.algo_id()){
             case 1:
-                option.selection_sort(list, LIST_SIZE); //Execute selection sort
+                option.selection_sort(unsorted_list, LIST_SIZE); //Execute selection sort
                 break;
             case 2:
-                option.bubble_sort(list, LIST_SIZE); //Execute bubble sort
+                option.bubble_sort(unsorted_list, LIST_SIZE); //Execute bubble sort
                 break;
             case 3:
-                option.insertion_sort(list, LIST_SIZE); //Execute insertion sort
+                option.insertion_sort(unsorted_list, LIST_SIZE); //Execute insertion sort
                 break;
             case 4:
-                option.quick_sort(list, 0, LIST_SIZE - 1); //Execute quick sort
+                option.quick_sort(unsorted_list, 0, LIST_SIZE - 1); //Execute quick sort
                 break;
             case 5:
-                option.merge_sort(list, 0, LIST_SIZE - 1); //Execute merge sort
+                option.merge_sort(unsorted_list, 0, LIST_SIZE - 1); //Execute merge sort
                 break;
         }
 
@@ -105,7 +105,7 @@ void compare_options(std::vector<Algo>& options){
             "}, {id: " << option.algo_id() << "} took " << option.algo_time().count() << "s to sort the list, " 
             << option.algo_accessc() << " array accesses, " << option.algo_movec() << " data moves..." << std::endl;
         
-        memcpy(list, copy_list, sizeof(list)); /*Perform a byte-wise copy on the copy list into the original list ,
+        memcpy(unsorted_list, copy_list, sizeof(unsorted_list)); /*Perform a byte-wise copy on the copy list into the original list ,
         so the unsorted data can remain constant throughout each test*/
 
         std::this_thread::sleep_for(std::chrono::seconds(1)); //Pause the thread of execution for one second, so the metadata can be viewed more easily
