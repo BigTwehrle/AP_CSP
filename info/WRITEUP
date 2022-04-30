@@ -1,0 +1,28 @@
+3a:
+i. The purpose of the program is to compare various data sorting algorithms and provide the user with statistics about their performance, such as completion time. This gives the user a clear idea of the performance differences between different algorithms, so they may use the most efficient one.
+
+ii. The video demonstrates the user selecting three initial algorithms to compare. The program then compares the runtime of these algorithms and outputs a table of data, including array access counters, data move counters and completion times. The user also removes some algorithms from the comparison list and chooses different ones, outputting another data table with statistics for the newly chosen algorithms.
+
+iii. There are three stages of input demonstrated in the video. Firstly, a menu asks the user to input numbers 1 through 5 to compare algorithms. Once the user enters a 0 on the menu stage, the program compares the chosen algorithms. Secondly, once the comparisons finish, the user is prompted if they want to compare the same algorithms again (with a simple 'y' or 'n' character input). Lastly, if the user does not want to compare again, they are prompted if they want to quit the application or choose new algorithms to compare (with a simple 'y' or 'n' character input).
+
+3b:
+iii. An array variable called unsorted_list represents a list containing 50,000 sequential signed integers, randomly generated between -25,000 and 25,000.
+
+iv. The unsorted_list variable contains the data that needs to be sorted by the program. The list is passed to the chosen sorting algorithm, which performs certain iterations and comparisons to sort the list in ascending order.
+
+v. When using the unsorted_list variable, only one declaration is made for a collection of 50,000 integers. If I were to declare one variable per integer instead of using an array or collection type, there will be a lot of unnecessary code. Not only will the program be bloated and contain boilerplate code, but the implementations of each sorting function would also have to change to deal with each individual variable. This will make it extremely difficult to change the size of the data collection. Overall, without the usage of a list, the program will become extremely unreadable, bloated, overly complex, and inefficient.
+
+3c:
+iii. The compare_options() procedure takes in a list of algorithms selected by the user and compares them. More thoroughly, it first initializes the empty unsorted_list with random numbers, then for each algorithm chosen, it executes the corresponding sorting algorithm on the list. Every time the list is sorted, data such as the execution time, array access count, and data move count are printed on the screen. Once all the sorting algorithms have been executed, the control of execution is passed to another function which outputs a result table. This is the core component of the program, performing the execution of sorting algorithms and comparisons.
+
+iv. Firstly, the unsorted_list variable is initialized with a function that iterates through the entire array and sets each index to a random number. Secondly, this initialized array is byte-wise copied into another array named copy_list, so the same data is sorted by each sorting algorithm. Thirdly, the list of algorithms "options" parameter is iterated through, executing an algorithm to the corresponding algorithm id. At the end of every data sort, the unsorted_list variable receives a byte-wise data copy from copy_list (therefore scrambling the list). Fourthly, the runtime statistics of each sorting algorithm are printed out at the end of each sort. Lastly, the control of execution is passed to another function which outputs the fastest and slowest algorithms neatly.
+
+3d.
+i. A hypothetical argument for the first call has two algo objects stored in the vector options, of ids 1 and 2.
+A hypothetical argument for the second call has three algo objects stored in the vector options, of ids 3, 4, and 5.
+
+ii. The execution pathway of procedure compare_options() is dependent on the types of algo objects the vector/list "options" stores. An algo object is a custom object created for the program, containing data such as sorting algorithm ids and names to associate the object with an algorithm. A switch statement in the procedure compares the current algo object's id with a set of cases, 1 through 5. In call one, the switch statement is matching the algo id with cases 1 and 2.
+In call two, the switch statement is matching the algo id with cases 3, 4, and 5.
+
+iii. The result of the first call sorts the unsorted_list using selection sort first, then bubble sort.
+The results of the second call sorts the unsorted_list using insertion sort first, quick sort second. Each sort from call 1 and call 2 collect runtime information about the algorithm's performance and stores it in its respective algo object.
